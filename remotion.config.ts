@@ -7,3 +7,16 @@ import { Config } from "@remotion/cli/config";
 
 Config.setVideoImageFormat("jpeg");
 Config.setOverwriteOutput(true);
+Config.overrideWebpackConfig((currentConfiguration) => {
+  return {
+    ...currentConfiguration,
+    resolve: {
+      ...currentConfiguration.resolve,
+      fallback: {
+        ...(currentConfiguration.resolve?.fallback || {}),  // 保留现有的 fallbacks
+        "path": false,                                      // 告诉 Webpack 'path' 模块在客户端不可用
+        "fs": false                                         // 告诉 Webpack 'fs' 模块 (包括 fs/promises) 在客户端不可用
+      },
+    },
+  };
+});

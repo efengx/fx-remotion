@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "My Remotion video",
   "scripts": {
-    "dev": "remotion studio",
+    "render": "remotion studio",
     "build": "remotion bundle",
     "upgrade": "remotion upgrade",
     "lint": "eslint src && tsc"
@@ -11,7 +11,11 @@
   "repository": {},
   "license": "UNLICENSED",
   "dependencies": {
+    "@remotion/captions": "4.0.314",
     "@remotion/cli": "^4.0.0",
+    "@remotion/google-fonts": "^4.0.314",
+    "@remotion/media-utils": "^4.0.314",
+    "@remotion/transitions": "^4.0.314",
     "@remotion/zod-types": "^4.0.0",
     "react": "19.0.0",
     "react-dom": "19.0.0",
@@ -20,11 +24,13 @@
   },
   "devDependencies": {
     "@remotion/eslint-config-flat": "^4.0.0",
+    "@types/node": "^22.15.30",
     "@types/react": "19.0.0",
     "@types/web": "0.0.166",
     "eslint": "9.19.0",
     "prettier": "3.3.3",
     "typescript": "5.8.2"
   },
-  "private": true
+  "private": true,
+  "packageManager": "pnpm@10.2.1+sha512.398035c7bd696d0ba0b10a688ed558285329d27ea994804a52bad9167d8e3a72bcb993f9699585d3ca25779ac64949ef422757a6c31102c12ab932e5cbe5cc92"
 }
