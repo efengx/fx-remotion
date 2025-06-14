@@ -1,6 +1,8 @@
 import { Sequence, useVideoConfig, AbsoluteFill } from 'remotion';
 import { Caption } from '@remotion/captions';
+import {loadFont} from '@remotion/google-fonts/Raleway';
 
+const { fontFamily } = loadFont();
 
 interface SubtitlesProps {
   captions: Caption[];                // SRT 文件在 public 目录下的路径
@@ -8,17 +10,19 @@ interface SubtitlesProps {
 }
 
 const defaultStyle: React.CSSProperties = {
-  fontFamily: 'Arial, Helvetica, sans-serif',
+  // fontFamily: 'Raleway, Arial, Helvetica, sans-serif',
+  fontFamily,
   fontSize: '24px',                             // 根据视频尺寸调整
   // fontWeight: 'bold',
   textAlign: 'center',
   color: 'white',
   backgroundColor: 'rgba(0, 0, 0, 0.5)',      // 半透明背景
-  padding: '10px 20px',
+  padding: '5px 5px',
   borderRadius: '5px',
   position: 'absolute',
-  bottom: '10%',                                // 距离底部10%
+  bottom: '3%',                                 // 距离底部3%
   left: '50%',
+  width: '94%',
   transform: 'translateX(-50%)',
   whiteSpace: 'pre-wrap',                       // 保留换行符
 };

@@ -9,6 +9,9 @@ import {
   staticFile,
   Easing,
 } from "remotion";
+import { ImageItem } from "../MyImage.loader";
+
+
 
 interface AnimatedImageProps {
   src: string;
@@ -16,18 +19,19 @@ interface AnimatedImageProps {
   imageTargetWidth: number;             // 图片渲染的目标宽度
   imageTargetHeight: number;            // 图片渲染的目标高度
   audioDurationInFrames: number;        // Total duration this image is visible (matches audio)
-  sequenceDurationFrames: number;
-  animationInDurationFrames: number;    // Duration of the slide-in/fade-in effect
-  // animationOutDurationFrames: number;   // Duration of the fade-out effect
+  sequenceDurationFrames: number;       
+  animationInDurationFrames: number;      // Duration of the slide-in/fade-in effect
+  // animationOutDurationFrames: number;  // Duration of the fade-out effect
   isLastScene: boolean;
-  zoomIntensity: number;                // 缩放幅度 (15%)
-  panIntensity: number;                // 平移幅度 (像素)
+  zoomIntensity: number;                  // 缩放幅度 (15%)
+  panIntensity: number;                   // 平移幅度 (像素)
+  scalingBase: number;                    // 缩放比例
   totalCompositionDurationFrames: number;
+  image: ImageItem,
 }
 
 export const AnimatedImage: React.FC<AnimatedImageProps> = (props) => {
   const frame = useCurrentFrame();              // Frame relative to the parent Sequence
-  
   const {
     fps,                                        // 
     width: screenWidth, 
@@ -35,6 +39,7 @@ export const AnimatedImage: React.FC<AnimatedImageProps> = (props) => {
   } = useVideoConfig();
   const {
     src,
+    image,
     slideInDirection,
     imageTargetWidth,
     imageTargetHeight,
@@ -43,12 +48,13 @@ export const AnimatedImage: React.FC<AnimatedImageProps> = (props) => {
     animationInDurationFrames,
     zoomIntensity,
     panIntensity,
+    scalingBase,
     isLastScene,
     totalCompositionDurationFrames,
   } = props;
 
   const safeAnimationInDuration = Math.min(animationInDurationFrames, sequenceDurationFrames);
-  
+
   // --- 特效参数 ---
   let scale = 1;
   let initialTranslateX = 0;
@@ -107,9 +113,9 @@ export const AnimatedImage: React.FC<AnimatedImageProps> = (props) => {
       scale = interpolate(
         frame, 
         [0, audioDurationInFrames], 
-        [1, 1 + zoomIntensity * 1.5], 
+        [scalingBase, scalingBase + zoomIntensity * 1.5], 
         {
-          easing: Easing.bezier(0.5, 0, 0.5, 1),                                            // 平滑的缓动
+          easing: Easing.bezier(0.5, 0, 0.5, 1),                                          // 平滑的缓动
         }
       );
       break;
@@ -117,7 +123,7 @@ export const AnimatedImage: React.FC<AnimatedImageProps> = (props) => {
       scale = interpolate(
         frame, 
         [0, audioDurationInFrames], 
-        [1 + zoomIntensity * 1.5, 1], 
+        [scalingBase + zoomIntensity * 1.5, scalingBase], 
         {
           easing: Easing.bezier(0.5, 0, 0.5, 1),
         }
@@ -131,31 +137,52 @@ export const AnimatedImage: React.FC<AnimatedImageProps> = (props) => {
   let currentXPosition = initialTranslateX;
   let currentYPosition = initialTranslateY;
 
+  currentYPosition = image.transpart === 0 ? currentYPosition : (currentYPosition + 170);
+
   const isSlideEffect = ["left", "right", "top", "bottom"].includes(
     slideInDirection
   );
   if (isSlideEffect) {
-    // 滑入弹簧效果（仅适用于“左”、“右”、“上”、“下”）
-    const springConfig = { stiffness: 100, damping: 20, mass: 1 };
-    const progressForSpring = spring({
-      frame,
-      fps,
-      config: springConfig,
-      durationInFrames: safeAnimationInDuration, 
-    });
-    currentXPosition = interpolate(
-      progressForSpring, 
-      [0, 1], 
-      [initialTranslateX, targetX]
-    );
-    currentYPosition = interpolate(
-      progressForSpring, 
-      [0, 1], 
-      [initialTranslateY, targetY]
-    );
+    if (image.transpart === 0) {
+      currentXPosition = interpolate(
+        frame,                                                    // 当前帧
+        [0, safeAnimationInDuration],                             // 输入范围：从0到入场动画结束
+        [initialTranslateX, targetX],                             // 输出范围：从初始位置到目标位置
+        { extrapolateLeft: "clamp", extrapolateRight: "clamp" }   // 确保值在范围内
+      );
+      currentYPosition = interpolate(
+        frame,
+        [0, safeAnimationInDuration],
+        [initialTranslateY, targetY],
+        { extrapolateLeft: "clamp", extrapolateRight: "clamp" }
+      );
+    } else {
+      const springConfig = { stiffness: 100, damping: 20, mass: 1 };
+      const progressForSpring = spring({
+        frame,
+        fps,
+        config: springConfig,
+        durationInFrames: safeAnimationInDuration, 
+      });
+      currentXPosition = interpolate(
+        progressForSpring,
+        [0, 1], 
+        [initialTranslateX, targetX],
+      );
+      currentYPosition = interpolate(
+        progressForSpring, 
+        [0, 1], 
+        [initialTranslateY, targetY],
+      );
+    }
   }
-  
-  const fadeInOpacity = interpolate(frame, [0, safeAnimationInDuration], [0, 1], { extrapolateRight: "clamp" });
+
+  const fadeInOpacity = interpolate(
+    frame, 
+    [0, safeAnimationInDuration], 
+    [0, 1], 
+    { extrapolateRight: "clamp" }
+  );
 
   // Fade out ONLY for the last scene, and it fades out at the end of the ENTIRE composition
   // Need to map the last scene's sequence frame to absolute frame for correct timing
@@ -168,7 +195,6 @@ export const AnimatedImage: React.FC<AnimatedImageProps> = (props) => {
       )
     : 1;
   const opacity = Math.min(fadeInOpacity, fadeOutOpacity);
-
 
   if (opacity === 0 && frame >= sequenceDurationFrames) {
     return null;
@@ -186,6 +212,7 @@ export const AnimatedImage: React.FC<AnimatedImageProps> = (props) => {
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
+          // boxShadow: `inset 0 0 0 2px red`,
         }}
       >
         <Img

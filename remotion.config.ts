@@ -5,7 +5,8 @@
 
 import { Config } from "@remotion/cli/config";
 
-Config.setVideoImageFormat("jpeg");
+Config.setMaxTimelineTracks(200);
+Config.setVideoImageFormat("png");
 Config.setOverwriteOutput(true);
 Config.overrideWebpackConfig((currentConfiguration) => {
   return {
