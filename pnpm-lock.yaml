@@ -17,6 +17,12 @@ importers:
       '@remotion/google-fonts':
         specifier: ^4.0.314
         version: 4.0.314(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+      '@remotion/licensing':
+        specifier: ^4.0.314
+        version: 4.0.314
+      '@remotion/media-parser':
+        specifier: ^4.0.314
+        version: 4.0.314
       '@remotion/media-utils':
         specifier: ^4.0.314
         version: 4.0.314(react-dom@19.0.0(react@19.0.0))(react@19.0.0)

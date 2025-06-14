@@ -1,7 +1,9 @@
 import { staticFile } from "remotion";
 import { parseSrt, ParseSrtOutput } from "@remotion/captions";
-import { getAudioDurationInSeconds } from "@remotion/media-utils";
-
+import { 
+  getAudioDurationInSeconds,
+} from "@remotion/media-utils";
+import {parseMedia} from '@remotion/media-parser';
 
 export const getCaptions = async ({
   srtPath,
@@ -43,6 +45,26 @@ export const getAudioDurationInFrames = async ({
   }
   return audioDurationInFrames;
 };
+
+export const getVideoDurationInFrames = async ({
+  videoPath,
+  fps,
+} : { videoPath: string, fps: number}) : Promise<number> => {
+  let videoDurationInFrames = 3 * fps; // 默认音频时长
+  try {
+    const metadata = await parseMedia({ 
+      src: staticFile(videoPath),
+      fields: {
+        durationInSeconds: true,
+        dimensions: true,
+      },
+    });
+    videoDurationInFrames = Math.ceil((metadata.durationInSeconds || 1) * fps);
+  } catch (e) {
+    console.warn(`Loader: Failed to get audio duration for ${videoPath}. Using default.`, e);
+  }
+  return videoDurationInFrames;
+}
 
 export const getResolution = (direction: string) => {
   const directionList = direction.split(":");

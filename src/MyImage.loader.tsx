@@ -112,10 +112,10 @@ export const myImageSchema = z.object({
 export type ClipVideoProps = z.infer<typeof myImageSchema>;
 
 export const DEFAULT_IMAGE_PROPS: ClipVideoProps = {
-  "session_id": "0c710c5d-4231-4d98-aa09-0a1a0996534c",
+  "session_id": "a628abb5-77ac-4f67-b7da-12cf82c0d37f",
   "direction": "16:9",
   "globalBackgroundColor": "#D3D3D3",
-  "slideInDirection": "bottom",
+  "slideInDirection": "left",
   "zoomIntensity": 0.15,
   "panIntensity": 50,
   "fps": 30,
@@ -125,6 +125,672 @@ export const DEFAULT_IMAGE_PROPS: ClipVideoProps = {
     {
       "chapter_index": 0,
       "sence_index": 0,
+      "images": [
+        {
+          "index": 0,
+          "level": 1,
+          "effect": "empty",
+          "transpart": 0
+        },
+        {
+          "index": 1,
+          "level": 2,
+          "effect": "right",
+          "transpart": 1
+        }
+      ]
+    },
+    {
+      "chapter_index": 0,
+      "sence_index": 1,
+      "images": [
+        {
+          "index": 0,
+          "level": 1,
+          "effect": "empty",
+          "transpart": 0
+        },
+        {
+          "index": 1,
+          "level": 2,
+          "effect": "right",
+          "transpart": 1
+        }
+      ]
+    },
+    {
+      "chapter_index": 0,
+      "sence_index": 2,
+      "images": [
+        {
+          "index": 0,
+          "level": 1,
+          "effect": "empty",
+          "transpart": 0
+        },
+        {
+          "index": 1,
+          "level": 2,
+          "effect": "right",
+          "transpart": 1
+        }
+      ]
+    },
+    {
+      "chapter_index": 1,
+      "sence_index": 3,
+      "images": [
+        {
+          "index": 0,
+          "level": 1,
+          "effect": "empty",
+          "transpart": 0
+        },
+        {
+          "index": 1,
+          "level": 2,
+          "effect": "right",
+          "transpart": 1
+        }
+      ]
+    },
+    {
+      "chapter_index": 1,
+      "sence_index": 4,
+      "images": [
+        {
+          "index": 0,
+          "level": 1,
+          "effect": "empty",
+          "transpart": 0
+        },
+        {
+          "index": 1,
+          "level": 2,
+          "effect": "right",
+          "transpart": 1
+        }
+      ]
+    },
+    {
+      "chapter_index": 1,
+      "sence_index": 5,
+      "images": [
+        {
+          "index": 0,
+          "level": 1,
+          "effect": "empty",
+          "transpart": 0
+        },
+        {
+          "index": 1,
+          "level": 2,
+          "effect": "empty",
+          "transpart": 1
+        }
+      ]
+    },
+    {
+      "chapter_index": 1,
+      "sence_index": 6,
+      "images": [
+        {
+          "index": 0,
+          "level": 1,
+          "effect": "empty",
+          "transpart": 0
+        },
+        {
+          "index": 1,
+          "level": 2,
+          "effect": "right",
+          "transpart": 1
+        }
+      ]
+    },
+    {
+      "chapter_index": 1,
+      "sence_index": 7,
+      "images": [
+        {
+          "index": 0,
+          "level": 1,
+          "effect": "empty",
+          "transpart": 0
+        },
+        {
+          "index": 1,
+          "level": 2,
+          "effect": "empty",
+          "transpart": 1
+        }
+      ]
+    },
+    {
+      "chapter_index": 1,
+      "sence_index": 8,
+      "images": [
+        {
+          "index": 0,
+          "level": 1,
+          "effect": "empty",
+          "transpart": 0
+        },
+        {
+          "index": 1,
+          "level": 2,
+          "effect": "empty",
+          "transpart": 1
+        }
+      ]
+    },
+    {
+      "chapter_index": 1,
+      "sence_index": 9,
+      "images": [
+        {
+          "index": 0,
+          "level": 1,
+          "effect": "empty",
+          "transpart": 0
+        },
+        {
+          "index": 1,
+          "level": 2,
+          "effect": "right",
+          "transpart": 1
+        }
+      ]
+    },
+    {
+      "chapter_index": 1,
+      "sence_index": 10,
+      "images": [
+        {
+          "index": 0,
+          "level": 1,
+          "effect": "empty",
+          "transpart": 0
+        },
+        {
+          "index": 1,
+          "level": 2,
+          "effect": "right",
+          "transpart": 1
+        }
+      ]
+    },
+    {
+      "chapter_index": 2,
+      "sence_index": 11,
+      "images": [
+        {
+          "index": 0,
+          "level": 1,
+          "effect": "empty",
+          "transpart": 0
+        },
+        {
+          "index": 1,
+          "level": 2,
+          "effect": "empty",
+          "transpart": 1
+        }
+      ]
+    },
+    {
+      "chapter_index": 2,
+      "sence_index": 12,
+      "images": [
+        {
+          "index": 0,
+          "level": 1,
+          "effect": "empty",
+          "transpart": 0
+        },
+        {
+          "index": 1,
+          "level": 2,
+          "effect": "empty",
+          "transpart": 1
+        }
+      ]
+    },
+    {
+      "chapter_index": 2,
+      "sence_index": 13,
+      "images": [
+        {
+          "index": 0,
+          "level": 1,
+          "effect": "empty",
+          "transpart": 0
+        },
+        {
+          "index": 1,
+          "level": 2,
+          "effect": "empty",
+          "transpart": 1
+        }
+      ]
+    },
+    {
+      "chapter_index": 2,
+      "sence_index": 14,
+      "images": [
+        {
+          "index": 0,
+          "level": 1,
+          "effect": "empty",
+          "transpart": 0
+        },
+        {
+          "index": 1,
+          "level": 2,
+          "effect": "right",
+          "transpart": 1
+        }
+      ]
+    },
+    {
+      "chapter_index": 2,
+      "sence_index": 15,
+      "images": [
+        {
+          "index": 0,
+          "level": 1,
+          "effect": "empty",
+          "transpart": 0
+        },
+        {
+          "index": 1,
+          "level": 2,
+          "effect": "right",
+          "transpart": 1
+        }
+      ]
+    },
+    {
+      "chapter_index": 2,
+      "sence_index": 16,
+      "images": [
+        {
+          "index": 0,
+          "level": 1,
+          "effect": "empty",
+          "transpart": 0
+        },
+        {
+          "index": 1,
+          "level": 2,
+          "effect": "empty",
+          "transpart": 1
+        }
+      ]
+    },
+    {
+      "chapter_index": 2,
+      "sence_index": 17,
+      "images": [
+        {
+          "index": 0,
+          "level": 1,
+          "effect": "empty",
+          "transpart": 0
+        },
+        {
+          "index": 1,
+          "level": 2,
+          "effect": "empty",
+          "transpart": 1
+        }
+      ]
+    },
+    {
+      "chapter_index": 2,
+      "sence_index": 18,
+      "images": [
+        {
+          "index": 0,
+          "level": 1,
+          "effect": "empty",
+          "transpart": 0
+        },
+        {
+          "index": 1,
+          "level": 2,
+          "effect": "right",
+          "transpart": 1
+        }
+      ]
+    },
+    {
+      "chapter_index": 3,
+      "sence_index": 19,
+      "images": [
+        {
+          "index": 0,
+          "level": 1,
+          "effect": "empty",
+          "transpart": 0
+        },
+        {
+          "index": 1,
+          "level": 2,
+          "effect": "right",
+          "transpart": 1
+        }
+      ]
+    },
+    {
+      "chapter_index": 3,
+      "sence_index": 20,
+      "images": [
+        {
+          "index": 0,
+          "level": 1,
+          "effect": "empty",
+          "transpart": 0
+        },
+        {
+          "index": 1,
+          "level": 2,
+          "effect": "right",
+          "transpart": 1
+        }
+      ]
+    },
+    {
+      "chapter_index": 3,
+      "sence_index": 21,
+      "images": [
+        {
+          "index": 0,
+          "level": 1,
+          "effect": "empty",
+          "transpart": 0
+        },
+        {
+          "index": 1,
+          "level": 2,
+          "effect": "right",
+          "transpart": 1
+        }
+      ]
+    },
+    {
+      "chapter_index": 3,
+      "sence_index": 22,
+      "images": [
+        {
+          "index": 0,
+          "level": 1,
+          "effect": "empty",
+          "transpart": 0
+        },
+        {
+          "index": 1,
+          "level": 2,
+          "effect": "right",
+          "transpart": 1
+        }
+      ]
+    },
+    {
+      "chapter_index": 3,
+      "sence_index": 23,
+      "images": [
+        {
+          "index": 0,
+          "level": 1,
+          "effect": "empty",
+          "transpart": 0
+        },
+        {
+          "index": 1,
+          "level": 2,
+          "effect": "empty",
+          "transpart": 1
+        }
+      ]
+    },
+    {
+      "chapter_index": 3,
+      "sence_index": 24,
+      "images": [
+        {
+          "index": 0,
+          "level": 1,
+          "effect": "empty",
+          "transpart": 0
+        },
+        {
+          "index": 1,
+          "level": 2,
+          "effect": "right",
+          "transpart": 1
+        }
+      ]
+    },
+    {
+      "chapter_index": 3,
+      "sence_index": 25,
+      "images": [
+        {
+          "index": 0,
+          "level": 1,
+          "effect": "empty",
+          "transpart": 0
+        },
+        {
+          "index": 1,
+          "level": 2,
+          "effect": "right",
+          "transpart": 1
+        }
+      ]
+    },
+    {
+      "chapter_index": 4,
+      "sence_index": 26,
+      "images": [
+        {
+          "index": 0,
+          "level": 1,
+          "effect": "empty",
+          "transpart": 0
+        },
+        {
+          "index": 1,
+          "level": 2,
+          "effect": "right",
+          "transpart": 1
+        }
+      ]
+    },
+    {
+      "chapter_index": 4,
+      "sence_index": 27,
+      "images": [
+        {
+          "index": 0,
+          "level": 1,
+          "effect": "empty",
+          "transpart": 0
+        },
+        {
+          "index": 1,
+          "level": 2,
+          "effect": "right",
+          "transpart": 1
+        }
+      ]
+    },
+    {
+      "chapter_index": 4,
+      "sence_index": 28,
+      "images": [
+        {
+          "index": 0,
+          "level": 1,
+          "effect": "empty",
+          "transpart": 0
+        },
+        {
+          "index": 1,
+          "level": 2,
+          "effect": "empty",
+          "transpart": 1
+        }
+      ]
+    },
+    {
+      "chapter_index": 4,
+      "sence_index": 29,
+      "images": [
+        {
+          "index": 0,
+          "level": 1,
+          "effect": "empty",
+          "transpart": 0
+        },
+        {
+          "index": 1,
+          "level": 2,
+          "effect": "empty",
+          "transpart": 1
+        }
+      ]
+    },
+    {
+      "chapter_index": 4,
+      "sence_index": 30,
+      "images": [
+        {
+          "index": 0,
+          "level": 1,
+          "effect": "empty",
+          "transpart": 0
+        },
+        {
+          "index": 1,
+          "level": 2,
+          "effect": "right",
+          "transpart": 1
+        }
+      ]
+    },
+    {
+      "chapter_index": 4,
+      "sence_index": 31,
+      "images": [
+        {
+          "index": 0,
+          "level": 1,
+          "effect": "empty",
+          "transpart": 0
+        },
+        {
+          "index": 1,
+          "level": 2,
+          "effect": "right",
+          "transpart": 1
+        }
+      ]
+    },
+    {
+      "chapter_index": 4,
+      "sence_index": 32,
+      "images": [
+        {
+          "index": 0,
+          "level": 1,
+          "effect": "empty",
+          "transpart": 0
+        },
+        {
+          "index": 1,
+          "level": 2,
+          "effect": "right",
+          "transpart": 1
+        }
+      ]
+    },
+    {
+      "chapter_index": 4,
+      "sence_index": 33,
+      "images": [
+        {
+          "index": 0,
+          "level": 1,
+          "effect": "empty",
+          "transpart": 0
+        },
+        {
+          "index": 1,
+          "level": 2,
+          "effect": "empty",
+          "transpart": 1
+        }
+      ]
+    },
+    {
+      "chapter_index": 5,
+      "sence_index": 34,
+      "images": [
+        {
+          "index": 0,
+          "level": 1,
+          "effect": "empty",
+          "transpart": 0
+        },
+        {
+          "index": 1,
+          "level": 2,
+          "effect": "right",
+          "transpart": 1
+        }
+      ]
+    },
+    {
+      "chapter_index": 5,
+      "sence_index": 35,
+      "images": [
+        {
+          "index": 0,
+          "level": 1,
+          "effect": "empty",
+          "transpart": 0
+        },
+        {
+          "index": 1,
+          "level": 2,
+          "effect": "empty",
+          "transpart": 1
+        }
+      ]
+    },
+    {
+      "chapter_index": 5,
+      "sence_index": 36,
+      "images": [
+        {
+          "index": 0,
+          "level": 1,
+          "effect": "empty",
+          "transpart": 0
+        },
+        {
+          "index": 1,
+          "level": 2,
+          "effect": "right",
+          "transpart": 1
+        }
+      ]
+    },
+    {
+      "chapter_index": 5,
+      "sence_index": 37,
       "images": [
         {
           "index": 0,
@@ -194,8 +860,9 @@ export const calculateMyImageMetadata = async (props: ClipVideoProps): Promise<C
 };
 
 export const calculateImageMetadata: CalculateMetadataFunction<ClipVideoProps> = async ({
-  props
+  props, defaultProps
 }) => {
+  props = props.direction ? props : defaultProps;
   const loaderData = await calculateMyImageMetadata(props);
 
   return {
