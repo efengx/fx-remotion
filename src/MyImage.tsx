@@ -14,7 +14,12 @@ import {
 } from "./FxAnimated/TransitionOverlay";
 import { getResolution } from './node/Utils'
 import { random } from 'remotion';
+import { loadFont } from '@remotion/google-fonts/Raleway';
 
+const { fontFamily } = loadFont('normal', {
+  weights: ['400', '700'],
+  subsets: ['latin'],
+});
 
 const TRANSITION_DURATION_SECONDS = 0.5;
 
@@ -46,22 +51,29 @@ export const MyImage: React.FC<ClipVideoProps> = (props) => {
     >
       {processedScenes.map((scene, index) => {
         const audioDuration = scene.audioDurationInFrames;
-        const isLastScene = index === processedScenes.length - 1;
-
+        
+        // 声音的起始帧
         const audioSequenceFrom = currentSequenceStartFrame;
+        // 声音的结束帧
         const audioSequenceDuration = audioDuration;
 
+        // 是否是最后的场景
+        const isLastScene = index === processedScenes.length - 1;
+        // 当前 Sequence 的起始帧
         const imageSequenceFrom = currentSequenceStartFrame;
+        // 当前 Sequence 的结束帧
         const imageSequenceDuration = isLastScene
           ? totalCompositionDurationFrames - imageSequenceFrom
           : audioDuration + transitionDurationFrames;
 
+        // 转场的起始帧
         const transitionSequenceFrom =
           currentSequenceStartFrame + audioDuration;
+        // 转场的结束帧
         const transitionSequenceDuration = transitionDurationFrames;
 
         currentSequenceStartFrame += audioDuration;
-
+        
         return (
           <React.Fragment key={scene.key}>
             <Sequence
@@ -74,9 +86,17 @@ export const MyImage: React.FC<ClipVideoProps> = (props) => {
                 let randomAnimation = props.slideInDirection;
                 if (image.transpart === 0) {
                   direction = props.direction;
-                  randomAnimation = BackgroundAnimation[Math.floor(random(image.imagePath) * BackgroundAnimation.length)];
+                  if (props.direction === "9:16") {
+                    randomAnimation = ForegroundAnimation[Math.floor(random(image.imagePath) * BackgroundAnimation.length)];
+                  } else {
+                    randomAnimation = BackgroundAnimation[Math.floor(random(image.imagePath) * ForegroundAnimation.length)];
+                  }
                 } else {
-                  randomAnimation = ForegroundAnimation[Math.floor(random(image.imagePath) * ForegroundAnimation.length)];
+                  if (props.direction === "9:16") {
+                    randomAnimation = BackgroundAnimation[Math.floor(random(image.imagePath) * ForegroundAnimation.length)];
+                  } else {
+                    randomAnimation = ForegroundAnimation[Math.floor(random(image.imagePath) * BackgroundAnimation.length)];
+                  }
                 }
                 const { width, height} = getResolution(direction);
                 return (
@@ -122,10 +142,15 @@ export const MyImage: React.FC<ClipVideoProps> = (props) => {
               durationInFrames={audioSequenceDuration}
             >
               <Audio src={staticFile(scene.audioSrcPath)} />
-              {scene.captions.length > 0 ? (
+              {/* 卡拉ok字幕 + 高亮显示 */}
+              {scene.wordTimings && scene.wordTimings.length > 0 ? (
                 <SubtitlesDisplay
-                  captions={scene.captions}
-                  style={{ fontSize: "50px" }}
+                  wordTimings={scene.wordTimings}
+                  style={{ 
+                    fontFamily,
+                    fontSize: "50px",
+                    color: 'rgb(255, 234, 5)'
+                  }}
                 />
               ) : null}
             </Sequence>

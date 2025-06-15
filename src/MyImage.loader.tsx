@@ -1,7 +1,6 @@
 import { CalculateMetadataFunction } from "remotion";
 import { z } from "zod";
-import { Caption } from '@remotion/captions';
-import { getCaptions, getAudioDurationInFrames } from './node/Utils'
+import { getWordTimingsFromFile, getAudioDurationInFrames } from './node/Utils'
 
 
 const TRANSITION_DURATION_SECONDS = 0.5;                                                          // 例如，0.5秒的转场
@@ -34,6 +33,19 @@ const TransitionTypes = [
 export const TransitionTypeSchema = z.enum(TransitionTypes);
 export type TransitionType = z.infer<typeof TransitionTypeSchema>;
 
+export interface WordTiming { 
+  word: string; 
+  start: number; 
+  end: number; 
+}
+
+export interface SubtitleLine {
+  words: WordTiming[];                          // 这一行包含的单词
+  lineStartTime: number;                        // 这一行开始显示的时间
+  lineEndTime: number;                          // 这一行结束显示的时间 (最后一个词的结束时间)
+  text: string;                                 // 这一行所有单词拼接成的文本 (可选，方便渲染)
+}
+
 export interface ImageItem {
   index: number,
   level: number,
@@ -49,7 +61,7 @@ export interface ProcessedSceneInfoForLoader {                                  
   images: ImageItem[],                                                                           // 原始路径，组件中再用 staticFile
   audioSrcPath: string;                                                                           // 原始路径，组件中再用 staticFile
   audioDurationInFrames: number;
-  captions: Caption[];
+  wordTimings: WordTiming[];
   transitionType?: TransitionType;
 }
 
@@ -76,13 +88,11 @@ export const myImageSchema = z.object({
       })),
       audioSrcPath: z.string(),
       audioDurationInFrames: z.number(),
-      captions: z.array(
+      wordTimings: z.array(
         z.object({
-          text: z.string(),
-          startMs: z.number(),
-          endMs: z.number(),
-          timestampMs: z.number().nullable(),
-          confidence: z.number().nullable()
+          word: z.string(), 
+          start: z.number(),
+          end: z.number(),
         })
       ),
       transitionType: TransitionTypeSchema.optional(),
@@ -824,10 +834,10 @@ export const calculateMyImageMetadata = async (props: ClipVideoProps): Promise<C
 
   for (const [index, sence] of props.scene_info.entries()) {
     const audioPath = `voice/chapter_${sence.chapter_index}-voice_${sence.sence_index}-${props.session_id}.mp3`;
-    const srtPath = `srt/chapter_${sence.chapter_index}-srt_${sence.sence_index}-${props.session_id}.srt`;
+    const srtWordPath = `srt/chapter_${sence.chapter_index}-srt_${sence.sence_index}-${props.session_id}.json`;
 
     const audioDurationInFrames = await getAudioDurationInFrames({audioPath: audioPath, fps: props.fps});
-    const { captions } = await getCaptions({srtPath: srtPath});
+    const { wordTimings } = await getWordTimingsFromFile({srtWordPath: srtWordPath});
 
     const transitionType = index < props.scene_info.length - 1
       ? TransitionTypes[index % TransitionTypes.length]                                           // 循环分配转场类型
@@ -845,7 +855,7 @@ export const calculateMyImageMetadata = async (props: ClipVideoProps): Promise<C
       }),                                                                                         // 传递原始路径
       audioSrcPath: audioPath,                                                                    // 传递原始路径
       audioDurationInFrames,
-      captions,
+      wordTimings,
       transitionType,
     });
     totalAudioDurationInFrames += audioDurationInFrames;
