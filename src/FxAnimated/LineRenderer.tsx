@@ -9,6 +9,7 @@ interface LineRendererProps {
   highlightBackgroundColor?: string;
   containerStyleBase: React.CSSProperties;
   wordStyleProp?: React.CSSProperties;
+  wordParentStyle?: React.CSSProperties;
 }
 
 export const LineRenderer: React.FC<LineRendererProps> = ({
@@ -19,6 +20,7 @@ export const LineRenderer: React.FC<LineRendererProps> = ({
   highlightBackgroundColor,
   containerStyleBase,
   wordStyleProp,
+  wordParentStyle,
 }) => {
   const frame = useCurrentFrame(); // 这是相对于当前行的 Sequence 的帧数
   const currentTimeInLineSequence = frame / fps;
@@ -29,6 +31,7 @@ export const LineRenderer: React.FC<LineRendererProps> = ({
         display: "flex",
         alignItems: "center",
         top: "60%",
+        ...wordParentStyle,
       }}
     >
       <div style={containerStyleBase}>

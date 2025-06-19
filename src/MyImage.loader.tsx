@@ -67,6 +67,7 @@ export interface ProcessedSceneInfoForLoader {                                  
 
 interface CalculatedMetadata {
   durationInFrames: number;
+  thumbnailImage: string;
   processedScenes: ProcessedSceneInfoForLoader[];                                                 // 将处理好的场景数据传递下去
   totalCompositionDurationFrames: number,
 }
@@ -74,6 +75,7 @@ interface CalculatedMetadata {
 export const myImageSchema = z.object({
   fps: z.number(),
   totalCompositionDurationFrames: z.number(),
+  thumbnailImage: z.string(),
   processedScenes: z.array(
     z.object({
       key: z.string(),
@@ -127,6 +129,7 @@ export const DEFAULT_IMAGE_PROPS: ClipVideoProps = {
   "globalBackgroundColor": "#D3D3D3",
   "slideInDirection": "left",
   "zoomIntensity": 0.15,
+  "thumbnailImage": "",
   "panIntensity": 50,
   "fps": 30,
   "processedScenes": [],
@@ -820,18 +823,10 @@ export const DEFAULT_IMAGE_PROPS: ClipVideoProps = {
 };
 
 export const calculateMyImageMetadata = async (props: ClipVideoProps): Promise<CalculatedMetadata> => {
-  if (!props || !props.scene_info || props.scene_info.length === 0) {
-    return {
-      durationInFrames: props.fps * 1,                                                                  // 至少1秒
-      processedScenes: [],
-      totalCompositionDurationFrames: props.fps * 1
-    };
-  }
-
   const transitionDurationFrames = Math.round(TRANSITION_DURATION_SECONDS * props.fps);
   const processedScenes: ProcessedSceneInfoForLoader[] = [];
   let totalAudioDurationInFrames = 0;
-
+  
   for (const [index, sence] of props.scene_info.entries()) {
     const audioPath = `voice/chapter_${sence.chapter_index}-voice_${sence.sence_index}-${props.session_id}.mp3`;
     const srtWordPath = `srt/chapter_${sence.chapter_index}-srt_${sence.sence_index}-${props.session_id}.json`;
@@ -862,8 +857,10 @@ export const calculateMyImageMetadata = async (props: ClipVideoProps): Promise<C
   }
   const totalCompositionDurationFrames = totalAudioDurationInFrames + transitionDurationFrames;
 
+  const thumbnailImage = (props.direction === "9:16" ? `image/thumbnail-${props.session_id}.png` : "");
   return {
     durationInFrames: Math.max(props.fps, totalCompositionDurationFrames),
+    thumbnailImage,
     processedScenes,
     totalCompositionDurationFrames,
   };
@@ -879,6 +876,7 @@ export const calculateImageMetadata: CalculateMetadataFunction<ClipVideoProps> =
     durationInFrames: loaderData.durationInFrames,
     props: {
       ...props,
+      thumbnailImage: loaderData.thumbnailImage,
       processedScenes: loaderData.processedScenes,
       totalCompositionDurationFrames: loaderData.totalCompositionDurationFrames,
     },

@@ -6,6 +6,7 @@ import { LineRenderer } from "./LineRenderer";
 
 interface SubtitlesProps {
   wordTimings: WordTiming[]; // SRT 文件在 public 目录下的路径
+  sceneIndex: number;
   activeColor?: string;
   inactiveColor?: string;
   highlightBackgroundColor?: string; // 高亮词的背景（可选）
@@ -15,6 +16,7 @@ interface SubtitlesProps {
   style?: React.CSSProperties; // 外部容器样式
   wordStyle?: React.CSSProperties; // 外部单词样式
   maxWordsPerLine?: number; // 新增：每行最大单词数
+  wordParentStyle?: React.CSSProperties;  // 字幕外框的样式
 }
 
 const defaultStyles = {
@@ -27,15 +29,17 @@ const defaultStyles = {
 
 export const SubtitlesDisplay: React.FC<SubtitlesProps> = ({
   wordTimings,
+  sceneIndex,
   activeColor = defaultStyles.activeColor,
   inactiveColor = defaultStyles.inactiveColor,
   highlightBackgroundColor, // 如果提供，则高亮词有背景色
   overallBackgroundColor = defaultStyles.overallBackgroundColor,
   fontSize = defaultStyles.fontSize,
   lineHeight = defaultStyles.lineHeight,
+  wordParentStyle,
   style,
   wordStyle,
-  maxWordsPerLine = 7, // 默认每行最多7个单词，可以调整
+  maxWordsPerLine = 6, // 默认每行最多7个单词，可以调整
 }) => {
   const { fps } = useVideoConfig();
 
@@ -62,12 +66,13 @@ export const SubtitlesDisplay: React.FC<SubtitlesProps> = ({
   return (
     <AbsoluteFill>
       {subtitleLines.map((line, lineIndex) => {
-        const lineStartFrame = Math.floor(line.lineStartTime * fps);
+        let lineStartFrame = Math.floor(line.lineStartTime * fps);
         const lineEndFrame = Math.ceil(line.lineEndTime * fps); // 用 ceil 确保包含最后一个词的完整时长
         const lineDurationInFrames = lineEndFrame - lineStartFrame;
 
         if (lineDurationInFrames <= 0) return null;
 
+        lineStartFrame = (sceneIndex === 0 && lineStartFrame === 0) ? lineStartFrame = 3 : lineStartFrame;
         return (
           <Sequence
             key={`line-${lineIndex}-${line.lineStartTime}`}
@@ -82,6 +87,7 @@ export const SubtitlesDisplay: React.FC<SubtitlesProps> = ({
               highlightBackgroundColor={highlightBackgroundColor}
               containerStyleBase={containerStyleBase} // 传递基本容器样式
               wordStyleProp={wordStyle} // 传递外部单词样式
+              wordParentStyle={wordParentStyle}
             />
           </Sequence>
         );

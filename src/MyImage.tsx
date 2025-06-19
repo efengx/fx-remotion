@@ -5,6 +5,7 @@ import {
   useVideoConfig,
   staticFile,
   Audio,
+  Img,
 } from "remotion";
 import { SubtitlesDisplay } from "./FxAnimated/SubtitlesDisplay";
 import { AnimatedImage } from "./FxAnimated/AnimatedImage";
@@ -27,6 +28,7 @@ export const MyImage: React.FC<ClipVideoProps> = (props) => {
   const { fps } = useVideoConfig();
   const {
     processedScenes,                                // 这是从 loader 传递过来的
+    thumbnailImage,
     totalCompositionDurationFrames,
   } = props;
 
@@ -43,12 +45,28 @@ export const MyImage: React.FC<ClipVideoProps> = (props) => {
     );
   }
 
-  let currentSequenceStartFrame = 0;
-
+  let currentSequenceStartFrame = 1;
   return (
     <AbsoluteFill
       // style={{ backgroundColor: props.globalBackgroundColor }}
     >
+      {/* 添加首帧的开场图片 */}
+      {thumbnailImage.length > 0 ? (
+        <Sequence durationInFrames={slideInAnimationDurationFrames} >
+          <Img
+            src={staticFile(thumbnailImage)} // Use staticFile to ensure Remotion finds local public assets
+            style={{
+              display: "block",
+              maxWidth: "100%",
+              maxHeight: "100%",
+              width: "auto",
+              height: "auto",
+              objectFit: "cover",
+            }}
+          />
+        </Sequence>
+      ) : null }
+
       {processedScenes.map((scene, index) => {
         const audioDuration = scene.audioDurationInFrames;
         
@@ -145,7 +163,11 @@ export const MyImage: React.FC<ClipVideoProps> = (props) => {
               {/* 卡拉ok字幕 + 高亮显示 */}
               {scene.wordTimings && scene.wordTimings.length > 0 ? (
                 <SubtitlesDisplay
+                  sceneIndex={index}
                   wordTimings={scene.wordTimings}
+                  wordParentStyle={{
+                    top: props.direction === "16:9" ? "85%" : "60%",
+                  }}
                   style={{ 
                     fontFamily,
                     fontSize: "50px",
