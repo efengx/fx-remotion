@@ -79,16 +79,19 @@ export const SubtitlesDisplay: React.FC<SubtitlesProps> = ({
             from={lineStartFrame}
             durationInFrames={lineDurationInFrames}
           >
-            <LineRenderer
-              line={line}
-              fps={fps} // 将 fps 传递下去
-              activeColor={activeColor}
-              inactiveColor={inactiveColor}
-              highlightBackgroundColor={highlightBackgroundColor}
-              containerStyleBase={containerStyleBase} // 传递基本容器样式
-              wordStyleProp={wordStyle} // 传递外部单词样式
-              wordParentStyle={wordParentStyle}
-            />
+            <AbsoluteFill // 确保这个 LineRenderer 填满其父 Sequence
+              style={wordParentStyle}
+            >
+              <LineRenderer
+                line={line}
+                fps={fps}
+                activeColor={activeColor}         // 活动颜色
+                inactiveColor={inactiveColor}     // 非活动颜色
+                highlightBackgroundColor={highlightBackgroundColor} // 高亮显示文字
+                containerStyleBase={containerStyleBase} // 单词画布的样式
+                wordStyleProp={wordStyle} // 单词的样式
+              />
+            </AbsoluteFill>
           </Sequence>
         );
       })}

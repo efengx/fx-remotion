@@ -32,25 +32,67 @@ const baseAreaStyle: React.CSSProperties = {
   alignItems: 'center',
 };
 
-const getAreaStyles = () => {
-  return {
-    3: {
-      ...baseAreaStyle,
-      top: '16%', 
-      left: '5%',
-      width: '384px', 
-      height: '384px', 
-      // boxShadow: `inset 0 0 0 2px red`,
-    },
-    4: {
-      ...baseAreaStyle,
-      top: '57%', 
-      right: '5%', // 使用 right 定位
-      width: '384px',
-      height: '384px',
-      // boxShadow: `inset 0 0 0 2px red`,
-    }
-  };
+const getAreaStyles = (direction: string, index: number) => {
+  switch (`${direction}-${index}`) {
+    case "9:16-3":
+      return {
+        ...baseAreaStyle,
+        top: '16%', 
+        left: '5%',
+        width: '384px', 
+        height: '384px', 
+        // boxShadow: `inset 0 0 0 2px red`,
+      }
+    case "9:16-4":
+      return {
+        ...baseAreaStyle,
+        top: '57%', 
+        right: '5%', // 使用 right 定位
+        width: '384px',
+        height: '384px',
+        // boxShadow: `inset 0 0 0 2px red`,
+      }
+    case "16:9-3":
+      return {
+        ...baseAreaStyle,
+        top: '5%', 
+        left: '5%',
+        width: '600px', 
+        height: '600px', 
+        // boxShadow: `inset 0 0 0 2px red`,
+      }
+    case "16:9-4":
+      return {
+        ...baseAreaStyle,
+        top: '5%', 
+        right: '5%', // 使用 right 定位
+        width: '600px',
+        height: '600px',
+        // boxShadow: `inset 0 0 0 2px red`,
+      }
+    default:
+      return {}
+  }
+}
+
+const getSubtitlesStyles = (direction: string) => {
+  console.log("===direction,", direction);
+  switch (direction) {
+    case "9:16":
+      return {
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+      }
+    case "16:9":
+      return {
+        display: "flex",
+        justifyContent: "flex-end",
+        alignItems: "flex-end",
+      }
+    default:
+      return {}
+  }
 }
 
 export const MyImage: React.FC<ClipVideoProps> = (props) => {
@@ -75,6 +117,7 @@ export const MyImage: React.FC<ClipVideoProps> = (props) => {
   }
 
   let currentSequenceStartFrame = 1;
+  const direction = props.direction;
   return (
     <AbsoluteFill
       // style={{ backgroundColor: props.globalBackgroundColor }}
@@ -135,7 +178,6 @@ export const MyImage: React.FC<ClipVideoProps> = (props) => {
             >
               {/* 1. 渲染背景图片 */}
               {scene.images.filter(image => image.transpart === 0).map(image => {
-                const direction = props.direction;
                 let randomAnimation = props.slideInDirection;
                 
                 if (direction === "9:16") {
@@ -192,7 +234,7 @@ export const MyImage: React.FC<ClipVideoProps> = (props) => {
                   >
                     <div
                       key={index + "-" + image.imagePath}
-                      style={index % 2 === 1 ? getAreaStyles()[4] : getAreaStyles()[3]}
+                      style={index % 2 === 1 ? getAreaStyles(direction, 4) : getAreaStyles(direction, 3)}
                     >
                       <AnimatedImage
                         key={image.imagePath}
@@ -244,11 +286,7 @@ export const MyImage: React.FC<ClipVideoProps> = (props) => {
                 <SubtitlesDisplay
                   sceneIndex={index}
                   wordTimings={scene.wordTimings}
-                  wordParentStyle={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                  }}
+                  wordParentStyle={getSubtitlesStyles(direction)}
                   style={{ 
                     fontFamily,
                     fontSize: "50px",
