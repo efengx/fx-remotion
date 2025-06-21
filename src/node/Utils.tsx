@@ -126,3 +126,15 @@ export const getResolution = (direction: string) => {
       directionList[1] == "16" ? 1344 : directionList[1] == "1" ? 1024 : 768,
   };
 };
+
+// export function chunkArrayForLoop<T>(array: T[], chunkSize: number): T[][] {
+//   if (chunkSize <= 0) {
+//     throw new Error("Chunk size must be greater than 0.");
+//   }
+//   const result: T[][] = [];
+//   for (let i = 0; i < array.length; i += chunkSize) {
+//     const chunk = array.slice(i, i + chunkSize);
+//     result.push(chunk);
+//   }
+//   return result;
+// }

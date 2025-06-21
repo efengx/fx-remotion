@@ -5,14 +5,14 @@ import { getWordTimingsFromFile, getAudioDurationInFrames } from './node/Utils'
 
 const TRANSITION_DURATION_SECONDS = 0.5;                                                          // 例如，0.5秒的转场
 
-export const BackgroundAnimation = [
+export const StandardAnimation = [
   "left",
   "right",
   "top",
   "bottom"
 ]
 
-export const ForegroundAnimation = [
+export const KenBurnsAnimation = [
   "kenBurnsRight",
   "kenBurnsLeft",
   "zoomIn",

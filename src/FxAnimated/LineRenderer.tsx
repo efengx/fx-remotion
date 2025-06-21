@@ -27,12 +27,7 @@ export const LineRenderer: React.FC<LineRendererProps> = ({
 
   return (
     <AbsoluteFill // 确保这个 LineRenderer 填满其父 Sequence
-      style={{
-        display: "flex",
-        alignItems: "center",
-        top: "60%",
-        ...wordParentStyle,
-      }}
+      style={wordParentStyle}
     >
       <div style={containerStyleBase}>
         {line.words.map((wordInfo, wordIndex) => {

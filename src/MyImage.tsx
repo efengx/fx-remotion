@@ -9,7 +9,7 @@ import {
 } from "remotion";
 import { SubtitlesDisplay } from "./FxAnimated/SubtitlesDisplay";
 import { AnimatedImage } from "./FxAnimated/AnimatedImage";
-import { ClipVideoProps, ForegroundAnimation, BackgroundAnimation } from "./MyImage.loader";
+import { ClipVideoProps, KenBurnsAnimation, StandardAnimation } from "./MyImage.loader";
 import {
   TransitionOverlay,
 } from "./FxAnimated/TransitionOverlay";
@@ -23,6 +23,35 @@ const { fontFamily } = loadFont('normal', {
 });
 
 const TRANSITION_DURATION_SECONDS = 0.5;
+
+const baseAreaStyle: React.CSSProperties = {
+  position: 'absolute',
+  overflow: 'hidden', // 确保滑入动画不会超出区域边界
+  display: 'flex',    // 用于内部 AnimatedImage 的对齐（如果需要）
+  justifyContent: 'center',
+  alignItems: 'center',
+};
+
+const getAreaStyles = () => {
+  return {
+    3: {
+      ...baseAreaStyle,
+      top: '16%', 
+      left: '5%',
+      width: '384px', 
+      height: '384px', 
+      // boxShadow: `inset 0 0 0 2px red`,
+    },
+    4: {
+      ...baseAreaStyle,
+      top: '57%', 
+      right: '5%', // 使用 right 定位
+      width: '384px',
+      height: '384px',
+      // boxShadow: `inset 0 0 0 2px red`,
+    }
+  };
+}
 
 export const MyImage: React.FC<ClipVideoProps> = (props) => {
   const { fps } = useVideoConfig();
@@ -79,19 +108,24 @@ export const MyImage: React.FC<ClipVideoProps> = (props) => {
         const isLastScene = index === processedScenes.length - 1;
         // 当前 Sequence 的起始帧
         const imageSequenceFrom = currentSequenceStartFrame;
-        // 当前 Sequence 的结束帧
+        // 当前 Sequence 的结束帧, 也就是从0开始的动画持续帧数(通常是音频时长+转场时长, 结束帧没有转场时长)
         const imageSequenceDuration = isLastScene
           ? totalCompositionDurationFrames - imageSequenceFrom
           : audioDuration + transitionDurationFrames;
 
         // 转场的起始帧
-        const transitionSequenceFrom =
-          currentSequenceStartFrame + audioDuration;
+        const transitionSequenceFrom = currentSequenceStartFrame + audioDuration;
         // 转场的结束帧
         const transitionSequenceDuration = transitionDurationFrames;
-
-        currentSequenceStartFrame += audioDuration;
         
+        const foregroundImage = scene.images.filter(image => image.transpart === 1);
+        
+        // 当前场景下每张图片的平均帧数
+        const pairSequenceDuration = Math.ceil(imageSequenceDuration / foregroundImage.length);
+        let currentPairSequenceFrom = 1;
+
+        // 更新下一场的起始帧
+        currentSequenceStartFrame += audioDuration;
         return (
           <React.Fragment key={scene.key}>
             <Sequence
@@ -99,23 +133,17 @@ export const MyImage: React.FC<ClipVideoProps> = (props) => {
               from={imageSequenceFrom}
               durationInFrames={imageSequenceDuration}
             >
-              {scene.images.map(image => {
-                let direction = "1:1";
+              {/* 1. 渲染背景图片 */}
+              {scene.images.filter(image => image.transpart === 0).map(image => {
+                const direction = props.direction;
                 let randomAnimation = props.slideInDirection;
-                if (image.transpart === 0) {
-                  direction = props.direction;
-                  if (props.direction === "9:16") {
-                    randomAnimation = ForegroundAnimation[Math.floor(random(image.imagePath) * BackgroundAnimation.length)];
-                  } else {
-                    randomAnimation = BackgroundAnimation[Math.floor(random(image.imagePath) * ForegroundAnimation.length)];
-                  }
+                
+                if (direction === "9:16") {
+                  randomAnimation = KenBurnsAnimation[Math.floor(random(image.imagePath) * KenBurnsAnimation.length)];
                 } else {
-                  if (props.direction === "9:16") {
-                    randomAnimation = BackgroundAnimation[Math.floor(random(image.imagePath) * ForegroundAnimation.length)];
-                  } else {
-                    randomAnimation = ForegroundAnimation[Math.floor(random(image.imagePath) * BackgroundAnimation.length)];
-                  }
+                  randomAnimation = StandardAnimation[Math.floor(random(image.imagePath) * StandardAnimation.length)];
                 }
+
                 const { width, height} = getResolution(direction);
                 return (
                   <AnimatedImage
@@ -124,7 +152,7 @@ export const MyImage: React.FC<ClipVideoProps> = (props) => {
                     image={image}
                     imageTargetWidth={width}                                   // 图像目标宽度
                     imageTargetHeight={height}                                 // 图像目标高度
-                    slideInDirection={randomAnimation}                                         // 滑动方向
+                    slideInDirection={randomAnimation}                                          // 滑动方向
                     scalingBase={image.transpart === 0 ? 1 : 0.7}
                     audioDurationInFrames={audioDuration}                                       // 音频时长(帧数)
                     sequenceDurationFrames={imageSequenceDuration}                              // 图像序列持续时间
@@ -134,6 +162,56 @@ export const MyImage: React.FC<ClipVideoProps> = (props) => {
                     zoomIntensity={props.zoomIntensity}                                         // 缩放强度
                     panIntensity={props.panIntensity}                                           // 缩放距离
                   />
+                )
+              })}
+
+              {/* 2. 渲染前景图片 */}
+              {scene.images.filter(image => image.transpart === 1).map((image, index) => {
+                const direction = props.direction;
+                let randomAnimation0 = props.slideInDirection;
+                // let randomAnimation1 = props.slideInDirection;
+                if (direction === "9:16") {
+                  randomAnimation0 = StandardAnimation[Math.floor(random(image.imagePath) * StandardAnimation.length)];
+                } else {
+                  randomAnimation0 = KenBurnsAnimation[Math.floor(random(image.imagePath) * KenBurnsAnimation.length)];
+                }
+
+                const { width, height} = getResolution("1:1");
+
+                const pairSequenceFrom = currentPairSequenceFrom;
+
+                // 下一个循环的起始帧
+                currentPairSequenceFrom += pairSequenceDuration;
+                return (
+                  <Sequence
+                    key={`fg-pair-${image.imagePath}`}
+                    from={pairSequenceFrom}
+                    // 当前这对图片实际的动画持续时间，应为其轮播时段的长度。
+                    // AnimatedImage 内部的 sequenceDurationFrames 也应与此匹配，以确保动画（如Ken Burns）在正确的时段内完成。
+                    durationInFrames={pairSequenceDuration * 2} 
+                  >
+                    <div
+                      key={index + "-" + image.imagePath}
+                      style={index % 2 === 1 ? getAreaStyles()[4] : getAreaStyles()[3]}
+                    >
+                      <AnimatedImage
+                        key={image.imagePath}
+                        src={image.imagePath}
+                        image={image}
+                        imageTargetWidth={width}                                   // 图像目标宽度
+                        imageTargetHeight={height}                                 // 图像目标高度
+                        slideInDirection={randomAnimation0}                                          // 滑动方向
+                        scalingBase={0.7}
+                        audioDurationInFrames={audioDuration}                                       // 音频时长(帧数)
+                        sequenceDurationFrames={imageSequenceDuration}                              // 图像序列持续时间
+                        animationInDurationFrames={slideInAnimationDurationFrames}                  // 滑入动画持续时长(帧数)     
+                        isLastScene={isLastScene}                                                   // 是否是最后的场景
+                        totalCompositionDurationFrames={totalCompositionDurationFrames}             // 总构图持续时长(帧数)
+                        zoomIntensity={props.zoomIntensity}                                         // 缩放强度
+                        panIntensity={props.panIntensity}                                           // 缩放距离
+                      />
+                    </div>
+                  </Sequence>
                 )
               })}
             </Sequence>
@@ -159,6 +237,7 @@ export const MyImage: React.FC<ClipVideoProps> = (props) => {
               from={audioSequenceFrom}
               durationInFrames={audioSequenceDuration}
             >
+              {/* 语音旁白 */}
               <Audio src={staticFile(scene.audioSrcPath)} />
               {/* 卡拉ok字幕 + 高亮显示 */}
               {scene.wordTimings && scene.wordTimings.length > 0 ? (
@@ -166,7 +245,9 @@ export const MyImage: React.FC<ClipVideoProps> = (props) => {
                   sceneIndex={index}
                   wordTimings={scene.wordTimings}
                   wordParentStyle={{
-                    top: props.direction === "16:9" ? "85%" : "60%",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
                   }}
                   style={{ 
                     fontFamily,

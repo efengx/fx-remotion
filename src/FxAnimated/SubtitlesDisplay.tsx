@@ -22,7 +22,7 @@ interface SubtitlesProps {
 const defaultStyles = {
   activeColor: 'yellow',
   inactiveColor: 'white',
-  overallBackgroundColor: 'rgba(0, 0, 0, 0.6)',
+  // overallBackgroundColor: 'rgba(0, 0, 0, 0.2)',
   fontSize: 48,
   lineHeight: '1.5',
 };
@@ -33,7 +33,7 @@ export const SubtitlesDisplay: React.FC<SubtitlesProps> = ({
   activeColor = defaultStyles.activeColor,
   inactiveColor = defaultStyles.inactiveColor,
   highlightBackgroundColor, // 如果提供，则高亮词有背景色
-  overallBackgroundColor = defaultStyles.overallBackgroundColor,
+  // overallBackgroundColor = defaultStyles.overallBackgroundColor,
   fontSize = defaultStyles.fontSize,
   lineHeight = defaultStyles.lineHeight,
   wordParentStyle,
@@ -55,7 +55,7 @@ export const SubtitlesDisplay: React.FC<SubtitlesProps> = ({
     fontSize: `${fontSize}px`,
     lineHeight: lineHeight,
     color: inactiveColor, // 默认文字颜色
-    backgroundColor: overallBackgroundColor,
+    // backgroundColor: overallBackgroundColor,
     borderRadius: "8px",
     textAlign: "center",
     width: "90%", // 容器宽度
