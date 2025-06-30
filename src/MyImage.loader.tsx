@@ -183,6 +183,8 @@ export const calculateMyImageMetadata = async (props: ClipVideoProps): Promise<C
       ? TransitionTypes[index % TransitionTypes.length]                                           // 循环分配转场类型
       : undefined;
 
+    console.log("===scene:", sence);
+    console.log("===image:", sence.images);
     processedScenes.push({
       key: `scene-${sence.chapter_index}-${sence.sence_index}-${index}`,
       chapter_index: sence.chapter_index,

@@ -55,19 +55,19 @@ const getAreaStyles = (direction: string, index: number) => {
     case "16:9-3":
       return {
         ...baseAreaStyle,
-        top: '5%', 
-        left: '5%',
-        width: '600px', 
-        height: '600px', 
+        top: '15%', 
+        left: '10%',
+        width: '500px', 
+        height: '500px', 
         // boxShadow: `inset 0 0 0 2px red`,
       }
     case "16:9-4":
       return {
         ...baseAreaStyle,
-        top: '5%', 
-        right: '5%', // 使用 right 定位
-        width: '600px',
-        height: '600px',
+        top: '15%', 
+        right: '10%', // 使用 right 定位
+        width: '500px',
+        height: '500px',
         // boxShadow: `inset 0 0 0 2px red`,
       }
     default:
@@ -290,7 +290,8 @@ export const MyImage: React.FC<ClipVideoProps> = (props) => {
                   style={{ 
                     fontFamily,
                     fontSize: "50px",
-                    color: 'rgb(255, 234, 5)'
+                    // color: 'rgb(255, 234, 5)',
+                    // WebkitTextStroke: "1px #2C2C2C",
                   }}
                 />
               ) : null}

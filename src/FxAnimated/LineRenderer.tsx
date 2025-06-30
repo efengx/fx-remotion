@@ -40,7 +40,7 @@ export const LineRenderer: React.FC<LineRendererProps> = ({
           marginRight: "0.2em",
           transition: "color 0.05s linear, background-color 0.05s linear", // 更快的过渡
           color: isActive ? activeColor : inactiveColor,
-          fontWeight: isActive ? "bold" : "normal",
+          // fontWeight: isActive ? "bold" : "normal",
           ...(isActive &&
             highlightBackgroundColor && {
               backgroundColor: highlightBackgroundColor,

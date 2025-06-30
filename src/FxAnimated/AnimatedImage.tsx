@@ -142,9 +142,6 @@ export const AnimatedImage: React.FC<AnimatedImageProps> = (props) => {
   let currentXPosition = initialTranslateX;
   let currentYPosition = initialTranslateY;
 
-  currentYPosition =
-    image.transpart === 0 ? currentYPosition : currentYPosition + 170;
-
   const isSlideEffect = ["left", "right", "top", "bottom"].includes(
     slideInDirection,
   );

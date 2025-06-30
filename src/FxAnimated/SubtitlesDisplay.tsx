@@ -20,9 +20,9 @@ interface SubtitlesProps {
 }
 
 const defaultStyles = {
-  activeColor: 'yellow',
-  inactiveColor: 'white',
-  // overallBackgroundColor: 'rgba(0, 0, 0, 0.2)',
+  activeColor: 'rgb(255, 255, 0)',     // 选中颜色
+  inactiveColor: 'white',   // 默认的颜色
+  overallBackgroundColor: 'rgba(0, 0, 0, 0.45)',
   fontSize: 48,
   lineHeight: '1.5',
 };
@@ -33,13 +33,13 @@ export const SubtitlesDisplay: React.FC<SubtitlesProps> = ({
   activeColor = defaultStyles.activeColor,
   inactiveColor = defaultStyles.inactiveColor,
   highlightBackgroundColor, // 如果提供，则高亮词有背景色
-  // overallBackgroundColor = defaultStyles.overallBackgroundColor,
+  overallBackgroundColor = defaultStyles.overallBackgroundColor,
   fontSize = defaultStyles.fontSize,
   lineHeight = defaultStyles.lineHeight,
   wordParentStyle,
   style,
   wordStyle,
-  maxWordsPerLine = 6, // 默认每行最多7个单词，可以调整
+  maxWordsPerLine = 6, // 默认每行最多6个单词，可以调整
 }) => {
   const { fps } = useVideoConfig();
 
@@ -55,10 +55,10 @@ export const SubtitlesDisplay: React.FC<SubtitlesProps> = ({
     fontSize: `${fontSize}px`,
     lineHeight: lineHeight,
     color: inactiveColor, // 默认文字颜色
-    // backgroundColor: overallBackgroundColor,
+    backgroundColor: overallBackgroundColor,
     borderRadius: "8px",
     textAlign: "center",
-    width: "90%", // 容器宽度
+    width: "95%", // 容器宽度
     whiteSpace: "normal", // 允许自动换行
     ...style, // 外部传入的样式可以覆盖
   };
